@@ -2,9 +2,10 @@
 import torch
 import numpy as np
 from torch import nn
+from util.util_func import *
 
-# device = 'cuda' if torch.cuda.is_available() else 'cpu'
-device = 'cpu'
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+# device = 'cpu'
 print('Using {} device'.format(device))
 
 class MotionNetwork(nn.Module):
@@ -48,33 +49,22 @@ class MotionNetwork(nn.Module):
         out = activation(self.z5)
         return out
 
-    # def backward(self, X, y, o): ## Investigate minibatch gradient descent
-    #     self.o_error = y - 0 # output error
-    #     self.o_delta = self.o_error * nn.Tanh(o) ## NEED to define backprop function
-    #     self.z2_error = torch.matmul(self.o_delta, torch.t(self.W2))
-    #     self.z2_delta = self.z2_error * nn.Tanh(o) ## NEED to define backprop function        self.z2_error = torch.matmul(self.o_delta, torch.t(self.W2))
-    #     self.z4_error = torch.matmul(self.o_delta, torch.t(self.W3))
-    #     self.z4_delta = self.z4_error * nn.Tanh(o) ## NEED to define backprop function
-    #     self.W1 += torch.matmul(torch.t(X), self.z2_delta)
-    #     self.W2 += torch.matmul(torch.t(self.z2), self.z4_delta)
-    #     self.W3 += torch.matmul(torch.t(self.z4), self.o_delta)
-    #
-    # def train(self, X, y):
-    #     o = self.forward(X)
-    #     self.backward(X, y, o)
-    #
-    # def saveWeights(self, model):
-    #     torch.save(model, 'motionNN')
-    #
-    # def predict(self, X):
-    #     o = self.forward(X)
-    #     return o
+    def pred_kinematic(self, X, curr_kinematic_pose, dt):
+        """
+        A function that predicts the next kinematic state based on current state and input
+        :param X: input vector (dynamic state and command)
+        :param curr_kinematic_pose: current kinematic pose [x, y, yaw] in world frame
+        :param dt: time step
+        :return:
+        """
+        next_dynamic_states = self.forward(X) # predict next dynamic state
 
-def train(model, x, y, optimizer, criterion):
-    model.zero_grad()
-    output = model(x)
-    loss =criterion(output,y)
-    loss.backward()
-    optimizer.step()
+        # apply simple unicycle model to compute next body frame pose
+        next_kinematic_pose_bf = np.array([curr_kinematic_pose[0] + next_dynamic_states[1] * dt,
+                                           curr_kinematic_pose[1] + next_dynamic_states[2] * dt,
+                                           curr_kinematic_pose[2] + next_dynamic_states[3] * dt])
 
-    return loss, output
+        # compute and apply transform from body to world frame
+        body_to_world = rigid_tranformation(np.array([0, 0, curr_kinematic_pose[2]]))
+        next_kinematic_pose_wf = np.matmul(body_to_world, next_kinematic_pose_bf)
+        return next_kinematic_pose_wf
