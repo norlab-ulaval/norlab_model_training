@@ -1,3 +1,4 @@
+# coding=utf-8
 import pandas as pd
 import numpy as np
 import torch
@@ -14,26 +15,26 @@ euler_angles = np.zeros((ls_CCW.shape[0], 3))
 len_data = 4 #length of data vectors to feed to network
 data_x = np.zeros((len_data, 8)) # input is [roll, vx, vy, yaw_rate, u_left_t0, u_right_t0, u_left_t1, u_right_t1]
 data_y = np.zeros((len_data, 3)) # output is [x, y, yaw]
-id = 0
+_id = 0
 
 for i in range(1, ls_CCW.shape[0]):
     euler_angles[i, :] = quaternion_to_euler(ls_CCW[i, 13], ls_CCW[i, 10], ls_CCW[i, 11], ls_CCW[i, 12])[2]
     dt = ls_CCW[i, 1] - ls_CCW[i-1, 1]
-    if ls_CCW[i, 3] != id:
-        data_x[id, 0] = euler_angles[i, 0]
-        data_x[id, 1] = (ls_CCW[i, 8] - ls_CCW[i-1, 8]) / dt # vx # need to do the inverse transform from map to body
-        data_x[id, 2] = (ls_CCW[i, 9] - ls_CCW[i-1, 9]) / dt # vy
-        data_x[id, 3] = (euler_angles[i, 2] - euler_angles[i-1, 2]) / dt # yaw rate
-        data_x[id, 4] = ls_CCW[i-1, 4] # u_left_t0
-        data_x[id, 5] = ls_CCW[i-1, 6] # u_right_t0
-        data_x[id, 6] = ls_CCW[i, 4] # u_left_t1
-        data_x[id, 7] = ls_CCW[i, 6] # u_right_t1
+    if ls_CCW[i, 3] != _id:
+        data_x[_id, 0] = euler_angles[i, 0]
+        data_x[_id, 1] = (ls_CCW[i, 8] - ls_CCW[i - 1, 8])/dt # vx # need to do the inverse transform from map to body
+        data_x[_id, 2] = (ls_CCW[i, 9] - ls_CCW[i - 1, 9])/dt # vy
+        data_x[_id, 3] = (euler_angles[i, 2] - euler_angles[i - 1, 2])/dt # yaw rate
+        data_x[_id, 4] = ls_CCW[i - 1, 4] # u_left_t0
+        data_x[_id, 5] = ls_CCW[i - 1, 6] # u_right_t0
+        data_x[_id, 6] = ls_CCW[i, 4] # u_left_t1
+        data_x[_id, 7] = ls_CCW[i, 6] # u_right_t1
 
-        data_y[id, 0] = ls_CCW[i, 8]
-        data_y[id, 1] = ls_CCW[i, 9]
-        data_y[id, 2] = euler_angles[i, 2]
-        id = int(ls_CCW[i,3])
-    if id >= len_data:
+        data_y[_id, 0] = ls_CCW[i, 8]
+        data_y[_id, 1] = ls_CCW[i, 9]
+        data_y[_id, 2] = euler_angles[i, 2]
+        _id = int(ls_CCW[i, 3])
+    if _id >= len_data:
         break
 
 X = torch.tensor(data_x)
