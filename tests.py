@@ -1,3 +1,4 @@
+# coding=utf-8
 import torch
 
 from util.dataset import *
@@ -5,7 +6,7 @@ from models.neural_network import *
 
 motion_dataset = MotionDataset(csv_file="data/low_speed_CCW_data_raw.csv")
 
-class TestDataset():
+class TestDataset:
 
     def test_dataset_output_is_offset_from_input(self):
         motion_dataset = MotionDataset(csv_file="data/low_speed_CCW_data_raw.csv")
@@ -22,7 +23,7 @@ class TestDataset():
 
 motion_network = MotionNetwork()
 
-class TestNetwork():
+class TestNetwork:
 
     def test_motion_prediction_output_is_4(self):
         pred = motion_network(torch.zeros(8))
