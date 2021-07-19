@@ -13,12 +13,11 @@ class MotionNetwork(nn.Module):
         super(MotionNetwork, self).__init__()
 
         # Parameters
-        self.inputSize = 8
+        self.inputSize = 6
         self.outputSize = 4
         self.hiddenSize = 32
 
-        # First fully connected layer, taking 8 input channels (r, vx, vy, yaw_rate, cmd_left_t0,
-        #                                                   cmd_right_t0, cmd_left_t0, cmd_right_t0)
+        # First fully connected layer, taking 6 input channels (r, vx, vy, yaw_rate, cmd_lin, cmd_ang)
         # outputting 32 features
         self.fc1 = nn.Linear(self.inputSize, self.hiddenSize)
         # Second fully connected (first hidden) layer that inputs / outputs 32 features

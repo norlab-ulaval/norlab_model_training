@@ -16,7 +16,7 @@ class TestDataset:
         assert motion_dataset.__getitem__(401)[0][3] == motion_dataset.__getitem__(400)[1][3]
 
     def test_dataset_input_size_is_8(self):
-        assert motion_dataset.__getitem__(400)[0].shape[0] == 8
+        assert motion_dataset.__getitem__(400)[0].shape[0] == 6
 
     def test_dataset_output_size_is_4(self):
         assert motion_dataset.__getitem__(400)[1].shape[0] == 4
@@ -26,5 +26,5 @@ motion_network = MotionNetwork()
 class TestNetwork:
 
     def test_motion_prediction_output_is_4(self):
-        pred = motion_network(torch.zeros(8))
+        pred = motion_network(torch.zeros(6))
         assert pred.shape[0] == 4
