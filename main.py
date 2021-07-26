@@ -15,7 +15,7 @@ from torch.utils.data import DataLoader
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    motion_dataset = MotionDataset(csv_file="data/low_speed_CCW_data_raw.csv")
+    motion_dataset = MotionDataset(csv_file="data/all_runs.csv")
 
     motion_network = MotionNetwork()
 

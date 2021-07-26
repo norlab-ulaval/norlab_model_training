@@ -16,7 +16,7 @@ class MotionDataset(Dataset):
         self.motion_data_df = pd.read_csv(csv_file)
         self.motion_data_np = self.motion_data_df.to_numpy()
 
-        self.motion_data_np[:, 1] = self.motion_data_np[:, 1] / 10**9
+        # self.motion_data_np[:, 1] = self.motion_data_np[:, 1] / 10**9
 
         len_data = self.motion_data_np.shape[0]
         icp_hits = int(self.motion_data_np[-1, 3])
@@ -94,9 +94,9 @@ class MotionDataset(Dataset):
         self.data_y = self.data_y[:-1]
 
         # plots to test data
-        plt.scatter(range(0, self.data_x.shape[0]), self.data_x[:, 3], s = 5)
-        plt.scatter(range(0, self.data_x.shape[0]), self.data_x[:, 5], s = 5)
-        plt.show()
+        # plt.scatter(range(0, self.data_x.shape[0]), self.data_x[:, 3], s = 5)
+        # plt.scatter(range(0, self.data_x.shape[0]), self.data_x[:, 5], s = 5)
+        # plt.show()
 
         self.X = torch.from_numpy(self.data_x)
         self.X = self.X.float()
