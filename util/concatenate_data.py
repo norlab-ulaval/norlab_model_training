@@ -29,21 +29,23 @@ drift_CW = drift_CW.to_numpy()
 run_list = [low_speed_CCW, low_speed_CW, zigzag_CCW, zigzag_CW, acceleration_CCW, acceleration_CW,
             high_speed_CCW, high_speed_CW, drift_CCW, drift_CW]
 
-# set time of all arrays to start at 0, convert time in seconds
+# set time of all arrays to start at 0, convert time in seconds / same for icp index
 for run in run_list:
     run[:, 1] = run[:, 1] - run[0, 1]
-    run[:,1] = run[:,1] / 10**9
+    run[:,1] = run[:, 1] / 10**9
+    run[:, 3] = run[:, 3] - run[0, 3]
 
-# set the time of all runs to the end of the previous run
+# set the time of all runs to the end of the previous run / same for icp index
 for i in range(1, len(run_list)):
     run_list[i][:, 1] = run_list[i][:, 1] + run_list[i-1][-1, 1] + 0.05
+    run_list[i][:, 3] = run_list[i][:, 3] + run_list[i-1][-1, 3] + 1
 
 # concatenate the entire dataset
 
 all_runs = np.copy(low_speed_CCW)
 
 for i in range(1, len(run_list)):
-    np.vstack((all_runs, run_list[i]))
+    all_runs = np.vstack((all_runs, run_list[i]))
 
 # delete first column of array
 

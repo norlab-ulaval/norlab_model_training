@@ -31,6 +31,15 @@ def wrap2pi(angle):
     else:
         return (wrap2pi(angle - 2*np.pi))
 
+def comp_disp(x_fut, x_pres):
+    x_disp = x_fut - x_pres
+    return np.linalg.norm(x_disp)
+
+def disp_err(x_pred, x):
+    x_err = x_pred - x
+    x[2] = wrap2pi(x[2])
+    return x_err @ x_err
+
 
 def rigid_tranformation(params):
     """Returns a rigid transformation matrix

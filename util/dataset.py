@@ -94,8 +94,8 @@ class MotionDataset(Dataset):
         self.data_y = self.data_y[:-1]
 
         # plots to test data
-        # plt.scatter(range(0, self.data_x.shape[0]), self.data_x[:, 3], s = 5)
-        # plt.scatter(range(0, self.data_x.shape[0]), self.data_x[:, 5], s = 5)
+        # plt.scatter(range(0, self.data_x.shape[0]), self.data_x[:, 1], s = 5)
+        # plt.scatter(range(0, self.data_x.shape[0]), self.data_x[:, 4], s = 5)
         # plt.show()
 
         self.X = torch.from_numpy(self.data_x)

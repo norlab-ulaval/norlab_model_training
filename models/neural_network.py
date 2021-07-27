@@ -48,7 +48,7 @@ class MotionNetwork(nn.Module):
         out = activation(self.z5)
         return out
 
-    def pred_kinematic(self, X, curr_kinematic_pose, dt):
+    def predict(self, X, curr_kinematic_pose, dt):
         """
         A function that predicts the next kinematic state based on current state and input
         :param X: input vector (dynamic state and command)
@@ -56,14 +56,18 @@ class MotionNetwork(nn.Module):
         :param dt: time step
         :return:
         """
-        next_dynamic_states = self.forward(X) # predict next dynamic state
+        with torch.no_grad():
+            nn_output = self.forward(X) # predict next dynamic state
+            next_dynamic_states = nn_output.detach()
+            next_dynamic_states = next_dynamic_states.numpy()
 
-        # apply simple unicycle model to compute next body frame pose
-        next_kinematic_pose_bf = np.array([curr_kinematic_pose[0] + next_dynamic_states[1] * dt,
-                                           curr_kinematic_pose[1] + next_dynamic_states[2] * dt,
-                                           curr_kinematic_pose[2] + next_dynamic_states[3] * dt])
+            # compute and apply transform from body to world frame
+            body_to_world = rigid_tranformation(np.array([0, 0, curr_kinematic_pose[2]]))
+            body_vel = np.array([next_dynamic_states[1], next_dynamic_states[2], next_dynamic_states[3]])
+            world_vel = body_to_world @ body_vel
 
-        # compute and apply transform from body to world frame
-        body_to_world = rigid_tranformation(np.array([0, 0, curr_kinematic_pose[2]]))
-        next_kinematic_pose_wf = np.matmul(body_to_world, next_kinematic_pose_bf)
-        return next_kinematic_pose_wf
+            # apply simple unicycle model to compute next body frame pose
+            next_kinematic_states = np.array([curr_kinematic_pose[0] + world_vel[0] * dt,
+                                               curr_kinematic_pose[1] + world_vel[1] * dt,
+                                               curr_kinematic_pose[2] + world_vel[2] * dt])
+        return next_kinematic_states, next_dynamic_states
