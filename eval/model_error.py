@@ -106,7 +106,7 @@ for i in range(data.shape[0] - 1):
 
     X = np.hstack((nn_dyn_pose, cmds[i, 0]))
     X = np.hstack((X, cmds[i, 2]))
-    nn_kin_pose, nn_dyn_pose = motion_network.predict(torch.from_numpy(X).float(),
+    nn_kin_pose, nn_dyn_pose = motion_network.predict(torch.from_numpy(X),
                                                 nn_kin_pose, dt)
     nn_kin_pose[2] = wrap2pi(nn_kin_pose[2])
 

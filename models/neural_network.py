@@ -44,7 +44,7 @@ class MotionNetwork(nn.Module):
 
     def predict(self, X, curr_kinematic_pose, dt):
         """
-        A function that predicts the next kinematic state based on current state and input
+        A method that predicts the next kinematic state based on current state and input
         :param X: input vector (dynamic state and command)
         :param curr_kinematic_pose: current kinematic pose [x, y, yaw] in world frame
         :param dt: time step
