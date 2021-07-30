@@ -19,18 +19,12 @@ class MotionNetwork(nn.Module):
 
         # First fully connected layer, taking 6 input channels (r, vx, vy, yaw_rate, cmd_lin, cmd_ang)
         # outputting 32 features
-        self.fc1 = nn.Linear(self.inputSize, self.hiddenSize)
+        self.fc1 = nn.Linear(self.inputSize, self.hiddenSize).double()
         # Second fully connected (first hidden) layer that inputs / outputs 32 features
-        self.fc2 = nn.Linear(self.hiddenSize, self.hiddenSize)
+        self.fc2 = nn.Linear(self.hiddenSize, self.hiddenSize).double()
         # Third fully connected layer that inputs 32 features
         # outputting 4 next dynamic states (r, vx, vy, yaw_rate)
-        self.fc3 = nn.Linear(self.hiddenSize, self.outputSize)
-
-        # weights
-        self.W1 = torch.randn(self.inputSize, self.hiddenSize)
-        self.W2 = torch.randn(self.hiddenSize, self.hiddenSize)
-        self.W3 = torch.randn(self.hiddenSize, self.outputSize)
-
+        self.fc3 = nn.Linear(self.hiddenSize, self.outputSize).double()
 
     def forward(self, x):
         activation = nn.Tanh()

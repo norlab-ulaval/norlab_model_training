@@ -99,9 +99,7 @@ class MotionDataset(Dataset):
         # plt.show()
 
         self.X = torch.from_numpy(self.data_x)
-        self.X = self.X.float()
         self.y = torch.from_numpy(self.data_y)
-        self.y = self.y.float()
 
 
     def __len__(self):
