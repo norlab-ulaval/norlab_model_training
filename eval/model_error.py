@@ -31,7 +31,7 @@ motion_network.fc3.bias = torch.nn.Parameter(torch.from_numpy(b3))
 
 # load dataset
 
-data = pd.read_csv('../data/low_speed_CCW_data_raw.csv')
+data = pd.read_csv('../data/validation_data_raw.csv')
 data = data.to_numpy()
 data = np.delete(data, 0, 0)
 data[:, 1] = data[:, 1] / 10**9
@@ -47,7 +47,6 @@ icp_poses[0, 5] = time[0]
 icp_poses[0, :2] = data[0, 11:13]
 icp_poses[0, 2:5] = quaternion_to_euler(data[0, 16], data[0, 13],
                                         data[0, 14], data[0, 15])
-print(icp_poses.shape)
 
 for i in range(1, data.shape[0]-1):
     if icp_idx[i] != icp_idx[i-1]:
@@ -57,8 +56,8 @@ for i in range(1, data.shape[0]-1):
         icp_poses[icp_idx[i-1], 5] = time[i]
 
 icp_poses[-1, 5] = time[-1]
-icp_poses[icp_idx[-2], :2] = data[-1, 11:13]
-icp_poses[icp_idx[-2], 2:5] = quaternion_to_euler(data[-1, 16], data[-1, 13],
+icp_poses[icp_idx[-3], :2] = data[-1, 11:13]
+icp_poses[icp_idx[-3], 2:5] = quaternion_to_euler(data[-1, 16], data[-1, 13],
                                         data[-1, 14], data[-1, 15])
 
 cmds = np.zeros((data.shape[0], 3))
@@ -126,7 +125,12 @@ for i in range(data.shape[0] - 1):
         nn_dyn_pose[2] = icp_vels[icp_idx[i+1]-1, 1]
         nn_dyn_pose[3] = imu_yaw_rate[i+1]
 
-plt.scatter(range(icp_idx[-1]), cmd_err, s=5)
-# plt.ylim(0, 0.2)
-plt.scatter(range(icp_idx[-1]), nn_err, s=5)
+plt.scatter(range(icp_idx[-1]), cmd_err, s=5, label='Ideal diff-drive')
+plt.ylim(0, 2)
+plt.scatter(range(icp_idx[-1]), nn_err, s=5, label='Autorally NN')
+plt.ylabel('Model prediction error')
+plt.xlabel('Icp index')
+plt.legend()
+plt.title('Model prediction error on validation dataset (doughnuts)')
+plt.savefig('../figs/model_prediction_error.png')
 plt.show()
