@@ -52,23 +52,29 @@ if __name__ == '__main__':
     l = motion_network.state_dict()
     w1_export = l['fc1.weight']
     w1_export = w1_export.numpy()
+    w1_export = np.float64(w1_export)
     np.save('params/norlab_autorally_nn/dynamics_W1.npy', w1_export)
     b1_export = l['fc1.bias']
     b1_export = b1_export.numpy()
+    b1_export = np.float64(b1_export)
     np.save('params/norlab_autorally_nn/dynamics_b1.npy', b1_export)
 
     w2_export = l['fc2.weight']
     w2_export = w2_export.numpy()
+    w2_export = np.float64(w2_export)
     np.save('params/norlab_autorally_nn/dynamics_W2.npy', w2_export)
     b2_export = l['fc2.bias']
     b2_export = b2_export.numpy()
+    b2_export = np.float64(b2_export)
     np.save('params/norlab_autorally_nn/dynamics_b2.npy', b2_export)
 
     w3_export = l['fc3.weight']
     w3_export = w3_export.numpy()
+    w3_export = np.float64(w3_export)
     np.save('params/norlab_autorally_nn/dynamics_W3.npy', w3_export)
     b3_export = l['fc3.bias']
     b3_export = b3_export.numpy()
+    b3_export = np.float64(b3_export)
     np.save('params/norlab_autorally_nn/dynamics_b3.npy', b3_export)
 
     print(w1_export.shape)
