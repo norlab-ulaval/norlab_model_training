@@ -80,6 +80,6 @@ if __name__ == '__main__':
     print(w1_export.shape)
     print(b1_export.shape)
 
-    np.savez('params/norlab_autorally_nn/norlab_autorally_nn_02_08_2021.npz', dynamics_W1=w1_export, dynamics_b1=b1_export,
+    np.savez('params/norlab_autorally_nn/norlab_autorally_nn_02_08_2021_01.npz', dynamics_W1=w1_export, dynamics_b1=b1_export,
              dynamics_W2=w2_export, dynamics_b2=b2_export,
              dynamics_W3=w3_export, dynamics_b3=b3_export)

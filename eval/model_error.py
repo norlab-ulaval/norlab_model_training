@@ -14,35 +14,35 @@ diff_drive = Diff_drive(k)
 
 # init trained neural network
 motion_network = MotionNetwork()
-w1 = np.load('../params/original_files/dynamics_W1.npy')
-motion_network.fc1.weight = torch.nn.Parameter(torch.from_numpy(w1))
-b1 = np.load('../params/original_files/dynamics_b1.npy')
-motion_network.fc1.bias = torch.nn.Parameter(torch.from_numpy(b1))
-
-w2 = np.load('../params/original_files/dynamics_W2.npy')
-motion_network.fc2.weight = torch.nn.Parameter(torch.from_numpy(w2))
-b2 = np.load('../params/original_files/dynamics_b2.npy')
-motion_network.fc2.bias = torch.nn.Parameter(torch.from_numpy(b2))
-
-w3 = np.load('../params/original_files/dynamics_W3.npy')
-motion_network.fc3.weight = torch.nn.Parameter(torch.from_numpy(w3))
-b3 = np.load('../params/original_files/dynamics_b3.npy')
-motion_network.fc3.bias = torch.nn.Parameter(torch.from_numpy(b3))
-
-# w1 = np.load('../params/norlab_autorally_nn/dynamics_W1.npy')
+# w1 = np.load('../params/original_files/dynamics_W1.npy')
 # motion_network.fc1.weight = torch.nn.Parameter(torch.from_numpy(w1))
-# b1 = np.load('../params/norlab_autorally_nn/dynamics_b1.npy')
+# b1 = np.load('../params/original_files/dynamics_b1.npy')
 # motion_network.fc1.bias = torch.nn.Parameter(torch.from_numpy(b1))
 #
-# w2 = np.load('../params/norlab_autorally_nn/dynamics_W2.npy')
+# w2 = np.load('../params/original_files/dynamics_W2.npy')
 # motion_network.fc2.weight = torch.nn.Parameter(torch.from_numpy(w2))
-# b2 = np.load('../params/norlab_autorally_nn/dynamics_b2.npy')
+# b2 = np.load('../params/original_files/dynamics_b2.npy')
 # motion_network.fc2.bias = torch.nn.Parameter(torch.from_numpy(b2))
 #
-# w3 = np.load('../params/norlab_autorally_nn/dynamics_W3.npy')
+# w3 = np.load('../params/original_files/dynamics_W3.npy')
 # motion_network.fc3.weight = torch.nn.Parameter(torch.from_numpy(w3))
-# b3 = np.load('../params/norlab_autorally_nn/dynamics_b3.npy')
+# b3 = np.load('../params/original_files/dynamics_b3.npy')
 # motion_network.fc3.bias = torch.nn.Parameter(torch.from_numpy(b3))
+
+w1 = np.load('../params/norlab_autorally_nn/dynamics_W1.npy')
+motion_network.fc1.weight = torch.nn.Parameter(torch.from_numpy(w1))
+b1 = np.load('../params/norlab_autorally_nn/dynamics_b1.npy')
+motion_network.fc1.bias = torch.nn.Parameter(torch.from_numpy(b1))
+
+w2 = np.load('../params/norlab_autorally_nn/dynamics_W2.npy')
+motion_network.fc2.weight = torch.nn.Parameter(torch.from_numpy(w2))
+b2 = np.load('../params/norlab_autorally_nn/dynamics_b2.npy')
+motion_network.fc2.bias = torch.nn.Parameter(torch.from_numpy(b2))
+
+w3 = np.load('../params/norlab_autorally_nn/dynamics_W3.npy')
+motion_network.fc3.weight = torch.nn.Parameter(torch.from_numpy(w3))
+b3 = np.load('../params/norlab_autorally_nn/dynamics_b3.npy')
+motion_network.fc3.bias = torch.nn.Parameter(torch.from_numpy(b3))
 
 # load dataset
 

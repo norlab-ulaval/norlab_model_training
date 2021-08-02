@@ -53,7 +53,7 @@ class MotionNetwork(nn.Module):
         with torch.no_grad():
             nn_output = self.forward(X) # predict next dynamic state
             next_dynamic_states = nn_output.detach()
-            next_dynamic_states = next_dynamic_states.numpy()
+            next_dynamic_states = next_dynamic_states.numpy() * dt + X.numpy()[:4]
 
             # compute and apply transform from body to world frame
             body_to_world = rigid_tranformation(np.array([0, 0, curr_kinematic_pose[2]]))
