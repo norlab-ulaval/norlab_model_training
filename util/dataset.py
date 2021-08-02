@@ -74,6 +74,7 @@ class MotionDataset(Dataset):
         # third pass, compute velocity between each icp hit, log output
         _id = int(self.motion_data_np[0, 3])  # first icp index
         for i in range(1, self.motion_data_np.shape[0] - 1):
+            dt = self.motion_data_np[i, 1] - self.motion_data_np[i - 1, 1]
             if self.motion_data_np[i, 3] == _id: #if no new icp hit --> compute velocity from previous and next vel
                 self.data_x[i, 1] = (self.data_x[i-1, 1] + self.data_x[i+1, 1]) / 2 # compute avg between prev and next vel
                 self.data_x[i, 2] = (self.data_x[i-1, 2] + self.data_x[i+1, 2]) / 2
@@ -84,10 +85,10 @@ class MotionDataset(Dataset):
                 _id = int(self.motion_data_np[i, 3])
 
             # output is current state, indexed to previous input
-            self.data_y[i - 1, 0] = self.data_x[i, 0]  # roll
-            self.data_y[i - 1, 1] = self.data_x[i, 1]  # body v_x
-            self.data_y[i - 1, 2] = self.data_x[i, 2]  # body v_y
-            self.data_y[i - 1, 3] = self.data_x[i, 3]  # yaw rate
+            self.data_y[i - 1, 0] = (self.data_x[i, 0] - self.data_x[i-1, 0])  # roll
+            self.data_y[i - 1, 1] = self.data_x[i, 1] - self.data_x[i-1, 1]  # body v_x
+            self.data_y[i - 1, 2] = self.data_x[i, 2] - self.data_x[i-1, 2]  # body v_y
+            self.data_y[i - 1, 3] = self.data_x[i, 3] - self.data_x[i-1, 3]  # yaw rate
 
         # remove last row of both input and output array
         self.data_x = self.data_x[:-1]
